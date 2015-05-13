@@ -2,9 +2,9 @@ from network import Handler, poll
 import sys
 from threading import Thread
 from time import sleep
+import view
 
-
-myname = raw_input('What is your name? ')
+myname = view.getName()
 
 class Client(Handler):
     
@@ -12,7 +12,7 @@ class Client(Handler):
         pass
     
     def on_msg(self, msg):
-        print msg
+        view.printMsg(msg)
         
 host, port = 'localhost', 8888
 client = Client(host, port)
