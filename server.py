@@ -12,7 +12,12 @@ class MyHandler(Handler):
         pass
      
     def on_msg(self, msg):
-        print msg
+        if 'join' in msg:
+            handlers[msg['join']] = self
+        else:
+            for name in handlers.keys():
+                if name != msg['speak']:
+                    handlers[name].do_send(msg['speak'] + ": " + msg['txt'])
  
  
 port = 8888
