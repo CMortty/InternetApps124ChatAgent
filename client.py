@@ -3,6 +3,7 @@ import sys
 from threading import Thread
 from time import sleep
 import view
+import webbrowser
 
 myname = view.getName()
 
@@ -29,4 +30,7 @@ thread.start()
 
 while 1:
     mytxt = sys.stdin.readline().rstrip()
-    client.do_send({'speak': myname, 'txt': mytxt})
+    if mytxt == ":e":
+        webbrowser.open_new("http://upload.wikimedia.org/wikipedia/en/2/20/Captain_Picard_Chair.jpg")
+    else:
+        client.do_send({'speak': myname, 'txt': mytxt})
