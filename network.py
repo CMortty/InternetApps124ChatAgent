@@ -11,7 +11,7 @@ http://docstore.mik.ua/orelly/other/python/0596001886_pythonian-chp-19-sect-3.ht
 
 
 #################
-# Echo server:
+# Echo OLDserver:
 #################
 from network import Listener, Handler, poll
 
@@ -19,13 +19,13 @@ class MyHandler(Handler):
     def on_msg(self, data):
         self.do_send(data)
 
-server = Listener(8888, MyHandler)
+OLDserver = Listener(8888, MyHandler)
 while 1:
     poll()
 
 
 #################
-# One-message client:
+# One-message OLDclient:
 #################
 from network import Handler, poll
 
@@ -37,10 +37,10 @@ class Client(Handler):
         global done
         done = True
 
-client = Client('localhost', 8888)
+OLDclient = Client('localhost', 8888)
 while not done:
     poll()
-client.do_close()
+OLDclient.do_close()
 
 """
 
