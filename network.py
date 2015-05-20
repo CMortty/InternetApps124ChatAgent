@@ -64,6 +64,7 @@ class Handler(asynchat.async_chat):
         self.set_terminator('\0')
         self._buffer = []
         
+        
     def collect_incoming_data(self, data):
         self._buffer.append(data)
 

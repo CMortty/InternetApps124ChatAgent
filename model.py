@@ -28,23 +28,26 @@ class MyHandler(Handler):
         if 'join' in msg:
             self.handlers[msg['join']] = self
             self.do_send(self.prompt)
-            
-        elif msg['speak']=='1' and self.connected==False:
-            self.do_send("One moment while we connect you to an agent to assist you with your order!")
-            self.connected=True
-            
-        elif msg['speak']=='2' and self.connected==False:
-            self.do_send("One moment while we connect you to an agent who will take your feedback!")
-            self.connected=True
-            
-        elif msg['speak']=='3' and self.connected==False:
-            self.do_send("One moment while we connect you to an agent that can answer your questions!")
-            self.connected=True
-        
+            self.connected=False
         elif self.connected==True:
+            print(self.connected)
             view.printMsg(msg['speak'] + ": " + msg['txt'])
             mytxt = sys.stdin.readline().rstrip()
             self.do_send("Agent: " + mytxt)
+            
+        elif msg['txt']=='1' and self.connected==False:
+            self.do_send("One moment while we connect you to an agent to assist you with your order!")
+            self.connected=True
+            
+        elif msg['txt']=='2' and self.connected==False:
+            self.do_send("One moment while we connect you to an agent who will take your feedback!")
+            self.connected=True
+            
+        elif msg['txt']=='3' and self.connected==False:
+            self.do_send("One moment while we connect you to an agent that can answer your questions!")
+            self.connected=True
+        
+        
             
         else:
             self.do_send("Please provide a valid input.")
