@@ -15,7 +15,7 @@ class Controller():
             poll()
             sleep(0.05)  # seconds
             
-    def initiate(self):
+    def connectToServer(self):
         self.model.client.do_send({'join': view.myname})
         
     def clientLoop(self):

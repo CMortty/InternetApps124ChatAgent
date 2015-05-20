@@ -1,4 +1,4 @@
-from network import Listener, Handler, poll
+from network import Listener, Handler
 import view
 import sys
 
@@ -26,7 +26,7 @@ class MyHandler(Handler):
             self.handlers[msg['join']] = self
             self.do_send(self.prompt)
         else:
-            print msg['speak'] + ": " + msg['txt']
+            view.printMsg(msg['speak'] + ": " + msg['txt'])
             mytxt = sys.stdin.readline().rstrip()
             self.do_send("Agent: " + mytxt)
 

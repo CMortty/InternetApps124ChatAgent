@@ -9,5 +9,5 @@ c = Controller(model)
 
 view.getName()
 model.clientInstantiate()
-c.initiate()
+c.connectToServer()
 c.clientLoop()
