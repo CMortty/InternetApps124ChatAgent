@@ -11,7 +11,7 @@ myname = view.getName()
 class Client(Handler):
     
     def on_close(self):
-        pass
+        view.printMsg("Goodbye!")
     
     def on_msg(self, msg):
         view.printMsg(msg)
@@ -33,5 +33,7 @@ while 1:
     mytxt = sys.stdin.readline().rstrip()
     if mytxt == ":e":
         webbrowser.open_new("http://upload.wikimedia.org/wikipedia/en/2/20/Captain_Picard_Chair.jpg")
+    elif mytxt ==":q":
+        client.do_close()
     else:
         client.do_send({'speak': myname, 'txt': mytxt})

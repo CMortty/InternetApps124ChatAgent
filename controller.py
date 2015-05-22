@@ -27,6 +27,8 @@ class Controller():
             mytxt = sys.stdin.readline().rstrip()
             if mytxt == ":e":
                 webbrowser.open_new("http://upload.wikimedia.org/wikipedia/en/2/20/Captain_Picard_Chair.jpg")
+            elif mytxt ==":q":
+                self.model.client.do_close()
             else:
                 self.model.client.do_send({'speak': view.myname, 'txt': mytxt})
     
