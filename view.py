@@ -1,10 +1,3 @@
-class View():
-    
-    
-    ####CHECK THIS####
-    def __init__(self, model):
-        self.model = model
-
 myname = ""
 def getName():
     global myname

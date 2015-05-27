@@ -7,6 +7,7 @@ class Client(Handler):
     
     def on_close(self):
         view.printMsg("Goodbye!")
+        Model.running = False
     
     def on_msg(self, msg):
         view.printMsg(msg)
@@ -30,7 +31,6 @@ class MyHandler(Handler):
         except IndexError:
             pass
      
-    #When integrating code, check to see if the "self.connected = False" throws things off. It probably will.
     def on_msg(self, msg):
         if 'join' in msg:
             self.handlers[msg['join']] = self
@@ -61,15 +61,14 @@ class MyHandler(Handler):
                 elif msg['txt']=='3' and self.connected==False:
                     self.do_send("One moment while we connect you to an agent that can answer your questions!")
                     self.connected=True
-                
-                
-                    
+  
                 else:
                     self.do_send("Please provide a valid input.")
                     self.do_send(self.prompt)
 
 class Model():
     
+    running = True
     def __init__(self):
         self.host = 'localhost'
         self.port = 8888

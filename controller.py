@@ -4,6 +4,7 @@ import webbrowser
 from threading import Thread
 import sys
 import view
+from model import Model
 
 class Controller():
     
@@ -23,7 +24,7 @@ class Controller():
         thread.daemon = True  # die when the main thread dies 
         thread.start()
 
-        while 1:
+        while Model.running:
             mytxt = sys.stdin.readline().rstrip()
             if mytxt == ":e":
                 webbrowser.open_new("http://upload.wikimedia.org/wikipedia/en/2/20/Captain_Picard_Chair.jpg")
