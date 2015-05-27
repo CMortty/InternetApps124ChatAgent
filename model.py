@@ -23,48 +23,59 @@ class MyHandler(Handler):
         pass
         
     def on_close(self):
-        #Check to make sure someone is in the queue
+        for name, h in self.handlers.items():
+            if h == self:
+                del self.handlers[name]
         try:
             user = self.waiting.popleft()
-            user.do_send(self.prompt)
-            user.connected = False            
+            self.handlers[user[0]] = user[1]
+            user[1].do_send(self.prompt)
+            user[1].conn = False
         except IndexError:
-            pass
+            pass 
      
     def on_msg(self, msg):
         if 'join' in msg:
-            self.handlers[msg['join']] = self
-            if len(self.handlers) > 1:
-                self.do_send("The agent is currently busy. Please wait...")
-                self.waiting.append(self)
+            if len(self.handlers) == 0:
+                self.handlers[msg['join']] = self
+                self.conn = True
+            elif len(self.handlers) >= 2:
+                self.waiting.append((msg['join'], self))
+                self.do_send("Please wait for next available agent")
             else:
+                self.handlers[msg['join']] = self
                 self.do_send(self.prompt)
-                self.connected=False
+                self.conn = False
         else:
-            if self in self.waiting:
-                self.do_send("The agent is currently busy. Please wait...")
+            if (msg['speak'], self) in self.waiting:
+                self.do_send("Please wait for next available agent") 
             else:
-                if self.connected==True:
-                    print(self.connected)
-                    view.printMsg(msg['speak'] + ": " + msg['txt'])
-                    mytxt = sys.stdin.readline().rstrip()
-                    self.do_send("Agent: " + mytxt)
+                if self.conn==True:
+                    self.sendToAll(msg['txt'], msg['speak'])
                     
-                elif msg['txt']=='1' and self.connected==False:
-                    self.do_send("One moment while we connect you to an agent to assist you with your order!")
-                    self.connected=True
+                elif msg['txt']=='1' and self.conn==False:
+                    self.do_send("You are now connected to an agent to assist you with your order!")
+                    self.sendToAll("You are assisting me with an order!", msg['speak'])
+                    self.conn=True
                     
-                elif msg['txt']=='2' and self.connected==False:
-                    self.do_send("One moment while we connect you to an agent who will take your feedback!")
-                    self.connected=True
+                elif msg['txt']=='2' and self.conn==False:
+                    self.do_send("You are now connected to an agent who will take your feedback!")
+                    self.sendToAll("You are taking my feedback!", msg['speak'])
+                    self.conn=True
                     
-                elif msg['txt']=='3' and self.connected==False:
-                    self.do_send("One moment while we connect you to an agent that can answer your questions!")
-                    self.connected=True
+                elif msg['txt']=='3' and self.conn==False:
+                    self.do_send("You are now connected to an agent that can answer your questions!")
+                    self.sendToAll("You are answering my questions!", msg['speak'])
+                    self.conn=True
   
                 else:
                     self.do_send("Please provide a valid input.")
                     self.do_send(self.prompt)
+                    
+    def sendToAll(self, msg, myName):
+        for name in self.handlers.keys():
+            if name != myName:
+                self.handlers[name].do_send(myName + ": " + msg)
 
 class Model():
     
