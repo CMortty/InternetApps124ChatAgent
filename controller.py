@@ -27,6 +27,8 @@ class Controller():
                 webbrowser.open_new("http://upload.wikimedia.org/wikipedia/en/2/20/Captain_Picard_Chair.jpg")
             elif mytxt ==":q":
                 self.client.do_close()
+            elif mytxt == ":s":
+                self.client.do_send({'speak': view.myname, 'txt': ':s'})            
             else:
                 self.client.do_send({'speak': view.myname, 'txt': mytxt})
     
@@ -47,7 +49,13 @@ class Client(Handler):
         Model.running = False
     
     def on_msg(self, msg):
-        view.printMsg(msg)
+        if "CONVO:" in msg:
+            f = open('convo.txt','w')
+            f.write(msg)
+            f.close()
+            view.printMsg("Conversation saved in convo.txt.")
+        else:
+            view.printMsg(msg)
         
 class MyHandler(Handler):
 
@@ -78,12 +86,15 @@ class MyHandler(Handler):
             else:
                 Model.handlers[msg['join']] = self
                 self.do_send(Model.prompt)
+                Model.conversation += Model.prompt +"\n"
                 self.conn = False
         else:
             if (msg['speak'], self) in Model.waiting:
                 self.do_send("Please wait for next available agent") 
             else:
-                if self.conn==True:
+                if msg['txt']==':s' and self.conn==True:
+                    self.do_send("CONVO:\n" + Model.conversation)
+                elif self.conn==True:
                     self.sendToAll(msg['txt'], msg['speak'])
                     
                 elif msg['txt']=='1' and self.conn==False:
@@ -100,10 +111,15 @@ class MyHandler(Handler):
                     self.do_send("You are now connected to an agent that can answer your questions!")
                     self.sendToAll("You are answering my questions!", msg['speak'])
                     self.conn=True
-  
                 else:
                     self.do_send("Please provide a valid input.")
                     self.do_send(Model.prompt)
+                    
+                
+                if msg['txt'] != ':s':
+                    Model.conversation = Model.conversation + msg['speak'] + ": " + msg['txt'] + "\n"
+                if self.conn == False:
+                    Model.conversation += "Please provide a valid input.\n" + Model.prompt + "\n"
                     
     def sendToAll(self, msg, myName):
         for name in Model.handlers.keys():

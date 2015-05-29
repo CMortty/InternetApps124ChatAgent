@@ -6,5 +6,6 @@ class Model():
     handlers = {}
     waiting = collections.deque()
     host = 'localhost'
-    port = 8888
+    port = 8887
     running = True
+    conversation = ""
