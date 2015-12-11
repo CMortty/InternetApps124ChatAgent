@@ -6,7 +6,7 @@ handlers = {}  # map client handler to user name
 waiting = collections.deque()
 prompt = "Thank you for contacting us. Please tell us why you are here: \nType '1' if you need help with an order, \nType '2' if you would like to leave feedback, \nType '3' if you have a question about a product."
 
-print "We are on the server" 
+print("We are on the server")
 class MyHandler(Handler):
      
     def on_open(self):

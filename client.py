@@ -1,7 +1,7 @@
 import view
 from controller import Controller
 
-print "We are on the client"
+print("We are on the client")
 
 c = Controller()
 

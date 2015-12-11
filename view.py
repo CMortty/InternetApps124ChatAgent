@@ -5,4 +5,4 @@ def getName():
     return myname
     
 def printMsg(msg):
-    print msg
+    print(msg)

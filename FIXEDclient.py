@@ -4,16 +4,16 @@ from threading import Thread
 from time import sleep
 import webbrowser
 
-print "We are on the client"
-myname = raw_input('What is your name? ')
+print ("We are on the client")
+myname = input('What is your name? ')
 
 class Client(Handler):
     
     def on_close(self):
-        print "Goodbye!"
+        print("Goodbye!")
     
     def on_msg(self, msg):
-        print msg
+        print(msg)
         
 host, port = 'localhost', 8888
 client = Client(host, port)
